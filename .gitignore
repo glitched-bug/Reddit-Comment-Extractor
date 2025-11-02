@@ -1,0 +1,27 @@
+# Virtual environment
+venv/
+env/
+
+# Credentials
+config.py
+
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Data files
+*.csv
+*.xlsx
+data/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
