@@ -3,7 +3,7 @@ import pandas as pd
 import config
 from datetime import datetime
 
-def extract_comments(post_url):
+def extract_comments_from_url(post_url):
     """
     Extract all comments from a Reddit post and save to CSV.
     
@@ -45,6 +45,8 @@ def extract_comments(post_url):
             'is_submitter': comment.is_submitter,
             'permalink': f"https://reddit.com{comment.permalink}"
         })
+
+    return comments_data
     
     # Create DataFrame
     df = pd.DataFrame(comments_data)
@@ -58,6 +60,36 @@ def extract_comments(post_url):
     
     print(f"\n✅ Success!")
     print(f"📊 Total comments extracted: {len(comments_data)}")
+    print(f"💾 Saved to: {filename}")
+    
+    return filename
+
+def save_to_csv(all_comments, filename=None):
+    """
+    Save comments to CSV file.
+    
+    Args:
+        all_comments (list): List of comment dictionaries
+        filename (str): Optional custom filename
+    
+    Returns:
+        str: Filename of the saved CSV
+    """
+    if not all_comments:
+        print("⚠️  No comments to save")
+        return None
+    
+    # Generate filename if not provided
+    if not filename:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"reddit_comments_{timestamp}.csv"
+    
+    # Create DataFrame and save
+    df = pd.DataFrame(all_comments)
+    df.to_csv(filename, index=False, encoding='utf-8-sig')
+    
+    print(f"\n✅ Success!")
+    print(f"📊 Total comments: {len(all_comments)}")
     print(f"💾 Saved to: {filename}")
     
     return filename
@@ -80,7 +112,9 @@ def main():
         return
     
     try:
-        extract_comments(post_url)
+        comments = extract_comments_from_url(post_url)
+        # Imprimir cuántos se extrajeron
+        save_to_csv(comments)
     except Exception as e:
         print(f"\n❌ Error: {e}")
         print("\nMake sure:")
